@@ -1,0 +1,76 @@
+{
+  "variants": {
+    "kind=iron,stage=nub,ready=false": {
+      "model": "nodeores:block/cluster_iron_nub"
+    },
+    "kind=iron,stage=nub,ready=true": {
+      "model": "nodeores:block/cluster_iron_nub"
+    },
+    "kind=iron,stage=partial,ready=false": {
+      "model": "nodeores:block/cluster_iron_partial"
+    },
+    "kind=iron,stage=partial,ready=true": {
+      "model": "nodeores:block/cluster_iron_partial"
+    },
+    "kind=iron,stage=mature,ready=false": {
+      "model": "nodeores:block/cluster_iron_mature"
+    },
+    "kind=iron,stage=mature,ready=true": {
+      "model": "nodeores:block/cluster_iron_mature"
+    },
+    "kind=copper,stage=nub,ready=false": {
+      "model": "nodeores:block/cluster_copper_nub"
+    },
+    "kind=copper,stage=nub,ready=true": {
+      "model": "nodeores:block/cluster_copper_nub"
+    },
+    "kind=copper,stage=partial,ready=false": {
+      "model": "nodeores:block/cluster_copper_partial"
+    },
+    "kind=copper,stage=partial,ready=true": {
+      "model": "nodeores:block/cluster_copper_partial"
+    },
+    "kind=copper,stage=mature,ready=false": {
+      "model": "nodeores:block/cluster_copper_mature"
+    },
+    "kind=copper,stage=mature,ready=true": {
+      "model": "nodeores:block/cluster_copper_mature"
+    },
+    "kind=rocky,stage=nub,ready=false": {
+      "model": "nodeores:block/cluster_rocky_nub"
+    },
+    "kind=rocky,stage=nub,ready=true": {
+      "model": "nodeores:block/cluster_rocky_nub"
+    },
+    "kind=rocky,stage=partial,ready=false": {
+      "model": "nodeores:block/cluster_rocky_partial"
+    },
+    "kind=rocky,stage=partial,ready=true": {
+      "model": "nodeores:block/cluster_rocky_partial"
+    },
+    "kind=rocky,stage=mature,ready=false": {
+      "model": "nodeores:block/cluster_rocky_mature"
+    },
+    "kind=rocky,stage=mature,ready=true": {
+      "model": "nodeores:block/cluster_rocky_mature"
+    },
+    "kind=crystal,stage=nub,ready=false": {
+      "model": "nodeores:block/cluster_crystal_nub"
+    },
+    "kind=crystal,stage=nub,ready=true": {
+      "model": "nodeores:block/cluster_crystal_nub"
+    },
+    "kind=crystal,stage=partial,ready=false": {
+      "model": "nodeores:block/cluster_crystal_partial"
+    },
+    "kind=crystal,stage=partial,ready=true": {
+      "model": "nodeores:block/cluster_crystal_partial"
+    },
+    "kind=crystal,stage=mature,ready=false": {
+      "model": "nodeores:block/cluster_crystal_mature"
+    },
+    "kind=crystal,stage=mature,ready=true": {
+      "model": "nodeores:block/cluster_crystal_mature"
+    }
+  }
+}

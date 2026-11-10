@@ -1,0 +1,7 @@
+{
+    "replace": false,
+    "values": [
+        "nodeores:node_base",
+        "nodeores:node_cluster"
+    ]
+}

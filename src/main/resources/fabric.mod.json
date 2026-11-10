@@ -1,0 +1,27 @@
+{
+    "schemaVersion": 1,
+    "id": "${id}",
+    "version": "${version}",
+    "name": "${name}",
+    "description": "${description}",
+    "authors": [
+        "${author}"
+    ],
+    "contact": {
+        "sources": "https://github.com/workshopcraft/node-ores"
+    },
+    "license": "${license}",
+    "environment": "*",
+    "accessWidener": "nodeores.accesswidener",
+    "entrypoints": {
+        "main": [
+            "com.workshopcraft.nodeores.fabric.NodeOresFabric"
+        ]
+    },
+    "depends": {
+        "fabricloader": ">=${loader}",
+        "fabric-api": "*",
+        "minecraft": "${minecraft}",
+        "java": ">=${java}"
+    }
+}
