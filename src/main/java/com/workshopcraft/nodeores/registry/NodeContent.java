@@ -1,6 +1,7 @@
 package com.workshopcraft.nodeores.registry;
 
 import com.workshopcraft.nodeores.NodeOres;
+import com.workshopcraft.nodeores.logic.NodeSettings;
 import com.workshopcraft.nodeores.node.NodeBaseBlock;
 import com.workshopcraft.nodeores.node.NodeBaseBlockEntity;
 import com.workshopcraft.nodeores.node.NodeClusterBlock;
@@ -32,10 +33,13 @@ public final class NodeContent {
 
     private NodeContent() {}
 
+    private static final float BASE_BLAST_RESISTANCE = 1200.0F;
+
     public static void registerBlocks(BiConsumer<Identifier, Block> register) {
         BlockBehaviour.Properties base = BlockBehaviour.Properties.of()
                 .mapColor(MapColor.STONE)
-                .strength(1.5F, 6.0F)
+                .strength(NodeSettings.get().baseHardness, BASE_BLAST_RESISTANCE)
+                .requiresCorrectToolForDrops()
                 .sound(SoundType.STONE)
                 .noOcclusion();
         BlockBehaviour.Properties cluster = BlockBehaviour.Properties.of()

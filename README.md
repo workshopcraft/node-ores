@@ -1,12 +1,16 @@
 # Node Ores
 
-Surface stone nodes that grow mineable ore clusters. Mod id `nodeores`, package `com.workshopcraft.nodeores`, version 1.0.0.
+Surface stone nodes that grow mineable ore clusters. Mod id `nodeores`, package `com.workshopcraft.nodeores`, version 1.0.1.
 
 ## What a node is
 
-A node is a 2x2 stone outcrop, one block tall, made of four `nodeores:node_base` blocks. Each base can hold one ore cluster in the block directly above it, so a node has four growth spots. The stone is a low pile of cuboids with a taller pad in the middle. A cluster is its own block, with its own outline and mining cracks. Mining one cluster does not reset the others.
+A node is a 2x2 stone outcrop, one block tall, made of four `nodeores:node_base` blocks. Each corner is a flat slab with a one-pixel bevel on the outer edge, so the four blocks read as one stone slab. Each base can hold one ore cluster in the block directly above it, so a node has four growth spots. A cluster is its own block, with its own outline and mining cracks. Mining one cluster does not reset the others.
 
-Clusters are not full cubes and they do not glow. Iron and copper use rocky shapes. Diamond, emerald, amethyst, and quartz use a crystal shape. Every other ore uses a generic rocky shape. The exact block id is what controls drops; the shape is only the prototype look.
+Each node picks one ore when it is placed or generated and keeps that choice. Every cluster it sprouts is that ore. The pick comes from the config list (iron and copper by default). Operators can override it with `/nodeores place <ore>`.
+
+Clusters are simple mounds, not full cubes, and they do not glow. Iron, copper, other rocky ores, and crystal ores (diamond, emerald, amethyst, quartz) each use one texture. The exact block id is what controls drops. Retexturing is replacing the 16x16 PNGs listed in `TEXTURES.md`.
+
+The stone base is slow to mine. Default hardness is 18 (vanilla stone is 1.5, obsidian is 50), blast resistance is 1200, and a pickaxe is required for the cobblestone bonus. Bare hands can eventually break the stone and drop nothing. Ore clusters keep the hardness of the ore they copy.
 
 Growth has three shapes over the growth time: a nub, a larger partly exposed cluster, then the mature shape in the last third. The cluster can be mined only when the growth timer finishes. Until then, survival mining does not break it.
 
@@ -24,10 +28,11 @@ Overworld surface generation attempts one node per chunk, then keeps about 1 in 
 
 Operators can place and inspect without waiting:
 
-- Stand in open air on solid ground and run `/nodeores place`. The node uses your feet as one corner and tries the four horizontal directions.
-- `/nodeores grow` fills nearby nodes and marks every cluster harvestable.
-- `/nodeores inspect` prints ore id, shape, and timer for nearby clusters.
-- `/nodeores reload` reads `config/nodeores.json` again.
+- Stand in open air on solid ground and run `/nodeores place`. The node uses your feet as one corner, tries the four horizontal directions, and locks one ore from the config list.
+- `/nodeores place iron` or `/nodeores place minecraft:diamond_ore` locks that ore instead. A bare word, a block id, and a block tag all work. Tab completion suggests the config entries.
+- `/nodeores grow` fills nearby nodes and marks every cluster harvestable. New clusters use the node's ore.
+- `/nodeores inspect` prints the node's ore, then each cluster's ore id, shape, and timer.
+- `/nodeores reload` reads `config/nodeores.json` again. Hardness updates immediately. Ores already locked onto a node stay locked.
 
 These commands need permission level 2.
 
@@ -44,11 +49,12 @@ These commands need permission level 2.
   "clustersPerSpawnMax": 2,
   "maxClusters": 4,
   "worldgenOneIn": 32,
+  "baseHardness": 18,
   "baseBonus": ["minecraft:cobblestone|4"]
 }
 ```
 
-An ore entry can be a block id (`minecraft:iron_ore`) or a block tag (`c:ores/iron` or `#minecraft:iron_ores`). A tag uses the first non-deepslate block in the tag. If `c:ores/<material>` is missing or empty, the mod falls back to `minecraft:<material>_ore` (`quartz` falls back to `minecraft:nether_quartz_ore`). An empty `ores` list stops new clusters. Times below 10 seconds are raised to 10. The base bonus lines are `item_id` or `item_id|count`.
+An ore entry can be a block id (`minecraft:iron_ore`) or a block tag (`c:ores/iron` or `#minecraft:iron_ores`). A tag uses the first non-deepslate block in the tag. If `c:ores/<material>` is missing or empty, the mod falls back to `minecraft:<material>_ore` (`quartz` falls back to `minecraft:nether_quartz_ore`). An empty `ores` list stops new clusters. Times below 10 seconds are raised to 10. `baseHardness` is how long the stone takes to mine. Values at or below 0 become 18, and values above 1000 are capped at 1000. A missing key uses 18. The base bonus lines are `item_id` or `item_id|count`. Changing the ore list does not change a node that has already picked.
 
 ## Build
 
@@ -66,7 +72,7 @@ The version and loader set matches More Foods and Simple Golems:
 ./gradlew build
 ```
 
-That builds every row above. One project at a time is `./gradlew :26.1.2-fabric:build`. Jars are named `nodeores-<loader>-<minecraft>-1.0.0.jar`. Each project runs the same seven unit tests, covering growth stages, config parsing, and ore shapes. Those tests and a successful compile are the checks this repository runs. They do not start a client or a dedicated server.
+That builds every row above. One project at a time is `./gradlew :26.1.2-fabric:build`. Jars are named `nodeores-<loader>-<minecraft>-1.0.1.jar`. Each project runs the same eleven unit tests, covering growth stages, config parsing, ore names, and base hardness. Those tests and a successful compile are the checks this repository runs. They do not start a client or a dedicated server.
 
 ## Limitations
 

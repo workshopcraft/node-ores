@@ -21,7 +21,7 @@ public class NodeBaseBlockEntity extends BlockEntity {
         super(NodeContent.BASE_ENTITY, pos, state);
     }
 
-    public void configure(BlockPos anchor, int ox, int oz, boolean anchorFlag, int wait) {
+    public void configure(BlockPos anchor, int ox, int oz, boolean anchorFlag, int wait, String ore) {
         data.ax = anchor.getX();
         data.ay = anchor.getY();
         data.az = anchor.getZ();
@@ -29,6 +29,16 @@ public class NodeBaseBlockEntity extends BlockEntity {
         data.oz = oz == 0 ? 1 : Integer.signum(oz);
         data.anchor = anchorFlag;
         data.wait = wait;
+        data.ore = ore == null ? "" : ore;
+        sync();
+    }
+
+    public String oreId() {
+        return data.ore == null ? "" : data.ore;
+    }
+
+    public void setOreId(String ore) {
+        data.ore = ore == null ? "" : ore;
         sync();
     }
 

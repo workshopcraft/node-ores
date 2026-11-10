@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class NodeSettings {
+    public static final float DEFAULT_BASE_HARDNESS = 18.0F;
+    private static final float MAX_BASE_HARDNESS = 1000.0F;
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static Path configDir = Path.of("config");
     private static volatile Data current = new Data().normalized();
@@ -25,6 +27,7 @@ public final class NodeSettings {
         public int clustersPerSpawnMax = 2;
         public int maxClusters = 4;
         public int worldgenOneIn = 32;
+        public float baseHardness = DEFAULT_BASE_HARDNESS;
         public List<String> baseBonus = new ArrayList<>(List.of("minecraft:cobblestone|4"));
 
         public Data normalized() {
@@ -59,6 +62,8 @@ public final class NodeSettings {
             maxClusters = Math.min(4, Math.max(1, maxClusters));
             if (worldgenOneIn <= 0) worldgenOneIn = 32;
             worldgenOneIn = Math.min(100000, worldgenOneIn);
+            if (!Float.isFinite(baseHardness) || baseHardness <= 0.0F) baseHardness = DEFAULT_BASE_HARDNESS;
+            if (baseHardness > MAX_BASE_HARDNESS) baseHardness = MAX_BASE_HARDNESS;
             return this;
         }
     }

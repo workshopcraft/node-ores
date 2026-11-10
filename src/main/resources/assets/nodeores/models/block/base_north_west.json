@@ -1,8 +1,8 @@
 {
-  "ambientocclusion": true,
+  "ambientocclusion": false,
   "textures": {
-    "particle": "nodeores:block/stone",
-    "all": "nodeores:block/stone"
+    "particle": "nodeores:block/node_base",
+    "all": "nodeores:block/node_base"
   },
   "elements": [
     {
@@ -13,7 +13,7 @@
       ],
       "to": [
         16,
-        4,
+        14,
         16
       ],
       "faces": {
@@ -24,7 +24,8 @@
             16,
             16
           ],
-          "texture": "#all"
+          "texture": "#all",
+          "cullface": "down"
         },
         "up": {
           "uv": [
@@ -38,16 +39,7 @@
         "north": {
           "uv": [
             0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
+            2,
             16,
             16
           ],
@@ -56,16 +48,7 @@
         "west": {
           "uv": [
             0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
+            2,
             16,
             16
           ],
@@ -76,96 +59,19 @@
     {
       "from": [
         1,
-        4,
+        14,
         1
       ],
       "to": [
-        14,
-        8,
-        14
-      ],
-      "faces": {
-        "down": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        }
-      }
-    },
-    {
-      "from": [
-        3,
-        8,
-        3
-      ],
-      "to": [
-        12,
         16,
-        12
+        16,
+        16
       ],
       "faces": {
-        "down": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
         "up": {
           "uv": [
-            0,
-            0,
+            1,
+            1,
             16,
             16
           ],
@@ -173,105 +79,19 @@
         },
         "north": {
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "south": {
-          "uv": [
-            0,
+            1,
             0,
             16,
-            16
+            2
           ],
           "texture": "#all"
         },
         "west": {
           "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "east": {
-          "uv": [
-            0,
+            1,
             0,
             16,
-            16
-          ],
-          "texture": "#all"
-        }
-      }
-    },
-    {
-      "from": [
-        0,
-        4,
-        0
-      ],
-      "to": [
-        6,
-        7,
-        6
-      ],
-      "faces": {
-        "down": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "up": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "north": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "south": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "west": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
-          ],
-          "texture": "#all"
-        },
-        "east": {
-          "uv": [
-            0,
-            0,
-            16,
-            16
+            2
           ],
           "texture": "#all"
         }

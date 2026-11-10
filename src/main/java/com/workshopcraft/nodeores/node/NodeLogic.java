@@ -2,6 +2,7 @@ package com.workshopcraft.nodeores.node;
 
 import com.workshopcraft.nodeores.NodeOres;
 import com.workshopcraft.nodeores.logic.NodeSettings;
+import com.workshopcraft.nodeores.logic.OreTypes;
 import com.workshopcraft.nodeores.registry.NodeContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.RandomSource;
@@ -27,14 +28,33 @@ public final class NodeLogic {
     private NodeLogic() {}
 
     public static boolean place(LevelAccessor level, BlockPos origin, RandomSource random, int flags, boolean keepInChunk) {
+        return place(level, origin, random, flags, keepInChunk, null) != null;
+    }
+
+    public static String place(LevelAccessor level, BlockPos origin, RandomSource random, int flags, boolean keepInChunk, String requested) {
+        String ore = selectOre(random, requested);
+        if (ore == null) return null;
         int[][] signs = shuffledSigns(random);
         for (int[] sign : signs) {
             if (fits(level, origin, sign[0], sign[1], keepInChunk)) {
-                write(level, origin, sign[0], sign[1], random, flags);
-                return true;
+                write(level, origin, sign[0], sign[1], random, flags, ore);
+                return ore;
             }
         }
-        return false;
+        return null;
+    }
+
+    public static String selectOre(RandomSource random, String requested) {
+        List<String> resolved = resolvable(NodeSettings.get().ores);
+        if (requested == null || requested.isBlank()) {
+            if (resolved.isEmpty()) return "";
+            return resolved.get(random.nextInt(resolved.size()));
+        }
+        String matched = OreTypes.matchWord(resolved, requested);
+        if (matched != null) return matched;
+        String spec = OreTypes.explicitSpec(requested);
+        if (spec == null) return null;
+        return OreBook.resolve(spec);
     }
 
     public static void destroy(Level level, NodeBaseBlockEntity any, boolean bonus) {
@@ -91,7 +111,6 @@ public final class NodeLogic {
             else return;
         }
         BlockPos[] spots = footprint(anchor.anchorPos(), anchor.stepX(), anchor.stepZ());
-        List<String> choices = resolvable(NodeSettings.get().ores);
         int occupied = 0;
         List<BlockPos> empty = new ArrayList<>();
         for (BlockPos spot : spots) {
@@ -100,8 +119,9 @@ public final class NodeLogic {
             else if (above.isAir()) empty.add(spot.above());
         }
         int room = Math.min(empty.size(), Math.max(0, NodeSettings.get().maxClusters - occupied));
-        for (int i = 0; i < room && !choices.isEmpty(); i++) {
-            placeCluster(level, empty.get(i), choices.get(i % choices.size()), anchor.anchorPos());
+        String ore = lockedOre(level, anchor.anchorPos(), spots, level.getRandom());
+        for (int i = 0; i < room && !ore.isEmpty(); i++) {
+            placeCluster(level, empty.get(i), ore, anchor.anchorPos());
         }
         int total = NodeSettings.get().growthSeconds * 20;
         for (BlockPos spot : spots) {
@@ -145,8 +165,8 @@ public final class NodeLogic {
         int want = max > min ? min + random.nextInt(max - min + 1) : min;
         int count = Math.min(room, want);
         if (count <= 0) return;
-        List<String> choices = resolvable(cfg.ores);
-        if (choices.isEmpty()) {
+        String ore = lockedOre(level, anchor, spots, random);
+        if (ore.isEmpty()) {
             if (!warned) {
                 warned = true;
                 NodeOres.LOG.warn("None of the configured ores resolved to a block. Edit config/nodeores.json");
@@ -155,7 +175,37 @@ public final class NodeLogic {
         }
         for (int i = 0; i < count; i++) {
             BlockPos up = empty.remove(random.nextInt(empty.size()));
-            placeCluster(level, up, choices.get(random.nextInt(choices.size())), anchor);
+            placeCluster(level, up, ore, anchor);
+        }
+    }
+
+    private static String lockedOre(Level level, BlockPos anchor, BlockPos[] spots, RandomSource random) {
+        String ore = readOre(level, anchor);
+        if (live(ore)) return ore;
+        for (BlockPos spot : spots) {
+            if (level.getBlockEntity(spot.above()) instanceof NodeClusterBlockEntity cluster && live(cluster.oreId())) {
+                remember(level, spots, cluster.oreId());
+                return cluster.oreId();
+            }
+        }
+        String picked = selectOre(random, null);
+        if (!live(picked)) return "";
+        remember(level, spots, picked);
+        return picked;
+    }
+
+    private static boolean live(String ore) {
+        return ore != null && !ore.isEmpty() && NodeOres.block(NodeOres.parse(ore)) != null;
+    }
+
+    private static String readOre(Level level, BlockPos anchor) {
+        if (level.getBlockEntity(anchor) instanceof NodeBaseBlockEntity be) return be.oreId();
+        return "";
+    }
+
+    private static void remember(Level level, BlockPos[] spots, String ore) {
+        for (BlockPos spot : spots) {
+            if (level.getBlockEntity(spot) instanceof NodeBaseBlockEntity be) be.setOreId(ore);
         }
     }
 
@@ -179,7 +229,7 @@ public final class NodeLogic {
         return out;
     }
 
-    private static void write(LevelAccessor level, BlockPos origin, int ox, int oz, RandomSource random, int flags) {
+    private static void write(LevelAccessor level, BlockPos origin, int ox, int oz, RandomSource random, int flags, String ore) {
         BlockPos[] spots = footprint(origin, ox, oz);
         int minX = spots[0].getX();
         int minZ = spots[0].getZ();
@@ -194,7 +244,7 @@ public final class NodeLogic {
             BlockState state = NodeContent.BASE.defaultBlockState().setValue(NodeBaseBlock.CORNER, corner);
             level.setBlock(spot, state, flags);
             if (level.getBlockEntity(spot) instanceof NodeBaseBlockEntity be) {
-                be.configure(origin, ox, oz, spot.equals(origin), wait);
+                be.configure(origin, ox, oz, spot.equals(origin), wait, ore);
             }
         }
     }

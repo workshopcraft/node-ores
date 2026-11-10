@@ -18,7 +18,17 @@ class NodeSettingsTest {
         assertEquals(2, data.clustersPerSpawnMax);
         assertEquals(4, data.maxClusters);
         assertEquals(32, data.worldgenOneIn);
+        assertEquals(NodeSettings.DEFAULT_BASE_HARDNESS, data.baseHardness, 0.001F);
         assertEquals(List.of("minecraft:cobblestone|4"), data.baseBonus);
+    }
+
+    @Test
+    void baseHardnessClampsBrokenValues() {
+        assertEquals(16.0F, NodeSettings.parse("{\"baseHardness\":16}").baseHardness, 0.001F);
+        assertEquals(15.5F, NodeSettings.parse("{\"baseHardness\":15.5}").baseHardness, 0.001F);
+        assertEquals(NodeSettings.DEFAULT_BASE_HARDNESS, NodeSettings.parse("{\"baseHardness\":0}").baseHardness, 0.001F);
+        assertEquals(NodeSettings.DEFAULT_BASE_HARDNESS, NodeSettings.parse("{\"baseHardness\":-4}").baseHardness, 0.001F);
+        assertEquals(1000.0F, NodeSettings.parse("{\"baseHardness\":5000}").baseHardness, 0.001F);
     }
 
     @Test

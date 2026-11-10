@@ -1,6 +1,7 @@
 package com.workshopcraft.nodeores.node;
 
 import com.mojang.serialization.MapCodec;
+import com.workshopcraft.nodeores.logic.NodeSettings;
 import com.workshopcraft.nodeores.registry.NodeContent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
@@ -52,6 +53,14 @@ public class NodeBaseBlock extends BaseEntityBlock {
     }
 
     @Override
+    public float getDestroyProgress(BlockState state, Player player, BlockGetter level, BlockPos pos) {
+        float hardness = NodeSettings.get().baseHardness;
+        if (!Float.isFinite(hardness) || hardness <= 0.0F) return 0.0F;
+        int divisor = player.hasCorrectToolForDrops(state) ? 30 : 100;
+        return player.getDestroySpeed(state) / hardness / (float) divisor;
+    }
+
+    @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
         return new NodeBaseBlockEntity(pos, state);
     }
@@ -66,7 +75,7 @@ public class NodeBaseBlock extends BaseEntityBlock {
     @Override
     public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof NodeBaseBlockEntity be) {
-            NodeLogic.destroy(level, be, true);
+            NodeLogic.destroy(level, be, player.hasCorrectToolForDrops(state));
         }
         return super.playerWillDestroy(level, pos, state, player);
     }
@@ -74,7 +83,7 @@ public class NodeBaseBlock extends BaseEntityBlock {
     /*@Override
     public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
         if (!level.isClientSide() && level.getBlockEntity(pos) instanceof NodeBaseBlockEntity be) {
-            NodeLogic.destroy(level, be, true);
+            NodeLogic.destroy(level, be, player.hasCorrectToolForDrops(state));
         }
         super.playerWillDestroy(level, pos, state, player);
     }

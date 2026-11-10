@@ -1,7 +1,7 @@
 mod.id = "nodeores"
 mod.name = "Node Ores"
 mod.group = "com.workshopcraft.nodeores"
-mod.version = "1.0.0"
+mod.version = "1.0.1"
 mod.author = "workshopcraft"
 mod.license = "All Rights Reserved"
 mod.description = "Surface stone nodes that grow mineable ore clusters."
