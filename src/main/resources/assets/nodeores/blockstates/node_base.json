@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "corner=north_west": {
+      "model": "nodeores:block/base_north_west"
+    },
+    "corner=north_east": {
+      "model": "nodeores:block/base_north_east"
+    },
+    "corner=south_west": {
+      "model": "nodeores:block/base_south_west"
+    },
+    "corner=south_east": {
+      "model": "nodeores:block/base_south_east"
+    }
+  }
+}
